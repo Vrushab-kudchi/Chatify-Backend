@@ -17,12 +17,16 @@ export const uploadFile = async (file) => {
       console.log(error);
     });
 
-  const optimizeUrl = cloudinary.url(uploadResult?.public_id, {
+  fs.unlink(file.path, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("File deleted");
+    }
+  });
+  cloudinary.url(uploadResult?.public_id, {
     fetch_format: "auto",
     quality: "60",
-  });
-  fs.unlink(file.path, (err) => {
-    console.log("Error to delete file", err);
   });
 
   return uploadResult;

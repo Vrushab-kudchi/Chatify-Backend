@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+    bio: {
+      type: String,
+      required: true,
+    },
     avatar: {
       public_id: {
         type: String,
@@ -37,7 +41,7 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  
+
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);

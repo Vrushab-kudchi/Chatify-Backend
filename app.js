@@ -1,13 +1,14 @@
 import express from "express";
-import { Server } from "socket.io";
 import bodyParser from "body-parser";
 import { errorMiddleware } from "./middlewares/error.js";
+import cookieParser from "cookie-parser";
 
 //db
 import { connectDB } from "./utils/ConnectDB.js";
 
 //Routes
 import userRoute from "./routes/userRoute.js";
+import chatRoute from "./routes/chatRoute.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -21,9 +22,11 @@ connectDB(mongoURI);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 //Routes
 app.use("/api/user", userRoute);
+app.use("/api/chat", chatRoute);
 
 app.all("*", (req, res, next) => {
   const err = new Error(`can't find ${req.originalUrl} on the server`);
